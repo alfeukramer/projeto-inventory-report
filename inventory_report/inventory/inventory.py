@@ -3,7 +3,7 @@ from inventory_report.reports.simple_report import SimpleReport
 import csv
 
 
-class Importer():
+class Inventory():
     @staticmethod
     def import_data(path, type_report):
         with open(path, mode="r", encoding="utf-8") as file:
