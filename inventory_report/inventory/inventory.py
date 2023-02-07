@@ -1,37 +1,37 @@
 from inventory_report.reports.complete_report import CompleteReport
 from inventory_report.reports.simple_report import SimpleReport
-import csv
-import json
-import xmltodict
+from inventory_report.importer.csv_importer import CsvImporter
+from inventory_report.importer.json_importer import JsonImporter
+from inventory_report.importer.xml_importer import XmlImporter
 
 
 class Inventory():
+
+    def verify(data, type):
+        if type == "simples":
+            return SimpleReport.generate(data)
+        else:
+            return CompleteReport.generate(data)
+
     @staticmethod
     def import_data(path, type_report):
-        with open(path, mode="r", encoding="utf-8") as file:
 
-            if ".csv" in path and type_report == "completo":
-                csv_reader = list(csv.DictReader(file, delimiter=","))
-                return CompleteReport.generate(csv_reader)
+        if ".csv" in path:
+            data_csv_path = CsvImporter.import_data(path)
+            data_verify = Inventory.verify(data_csv_path, type_report)
+            return data_verify
 
-            elif ".csv" in path and type_report == "simples":
-                csv_reader = list(csv.DictReader(file, delimiter=","))
-                return SimpleReport.generate(csv_reader)
+        elif ".json" in path:
+            data_json_path = JsonImporter.import_data(path)
+            data_verify = Inventory.verify(data_json_path, type_report)
+            return data_verify
 
-            elif ".json" in path and type_report == "completo":
-                json_reader = json.load(file)
-                return CompleteReport.generate(json_reader)
+        elif ".xml" in path:
+            data_xml_path = XmlImporter.import_data(path)
+            data_verify = Inventory.verify(data_xml_path, type_report)
+            return data_verify
 
-            elif ".json" in path and type_report == "simples":
-                json_reader = json.load(file)
-                return SimpleReport.generate(json_reader)
+        else:
+            raise ValueError("Arquivo inválido")
 
-            elif ".xml" in path and type_report == "simples":
-                    xml_reader = xmltodict.parse(file.read())['dataset']['record']
-                    return SimpleReport.generate(xml_reader)
-
-            elif ".xml" in path and type_report == "completo":
-                    xml_reader = xmltodict.parse(file.read())['dataset']['record']
-                    return CompleteReport.generate(xml_reader)
-
-    print(import_data("inventory_report/data/inventory.xml", "simples"))
+    print(import_data("inventory_report/data/inventory.csv", "simples"))
