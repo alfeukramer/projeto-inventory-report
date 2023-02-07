@@ -18,8 +18,6 @@ class Inventory():
 
         if ".csv" in path:
             data_csv_path = CsvImporter.import_data(path)
-            # print("log do data_csv_path: ", data_csv_path)
-
             data_verify = Inventory.verify(data_csv_path, type_report)
             return data_verify
 
@@ -35,6 +33,3 @@ class Inventory():
 
         else:
             raise ValueError("Arquivo inválido")
-
-
-print(Inventory.import_data("inventory_report/data/inventory.csv", "simples"))
