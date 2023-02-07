@@ -3,11 +3,10 @@ from inventory_report.reports.simple_report import SimpleReport
 from inventory_report.importer.csv_importer import CsvImporter
 from inventory_report.importer.json_importer import JsonImporter
 from inventory_report.importer.xml_importer import XmlImporter
-# forçando push novamente
 
 
 class Inventory():
-
+    @staticmethod
     def verify(data, type):
         if type == "simples":
             return SimpleReport.generate(data)
@@ -19,6 +18,8 @@ class Inventory():
 
         if ".csv" in path:
             data_csv_path = CsvImporter.import_data(path)
+            # print("log do data_csv_path: ", data_csv_path)
+
             data_verify = Inventory.verify(data_csv_path, type_report)
             return data_verify
 
@@ -35,4 +36,5 @@ class Inventory():
         else:
             raise ValueError("Arquivo inválido")
 
-    print(import_data("inventory_report/data/inventory.csv", "simples"))
+
+print(Inventory.import_data("inventory_report/data/inventory.csv", "simples"))
