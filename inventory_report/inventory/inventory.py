@@ -33,3 +33,6 @@ class Inventory():
 
         else:
             raise ValueError("Arquivo inválido")
+
+
+print(Inventory.import_data("inventory_report/data/inventory.csv", "completo"))
